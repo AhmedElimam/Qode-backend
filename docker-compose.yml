@@ -1,0 +1,54 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: qode-backend-app
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+            - './:/var/www'
+            - './docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini'
+        networks:
+            - qode-network
+    webserver:
+        image: 'nginx:alpine'
+        container_name: qode-backend-nginx
+        restart: unless-stopped
+        ports:
+            - '8000:80'
+        volumes:
+            - './:/var/www'
+            - './docker/nginx/conf.d/:/etc/nginx/conf.d/'
+        networks:
+            - qode-network
+    db:
+        image: 'mysql:8.0'
+        container_name: qode-backend-db
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: qode_news
+            MYSQL_ROOT_PASSWORD: root_password
+            MYSQL_PASSWORD: qode_password
+            MYSQL_USER: qode_user
+        # ports:
+        #     - '3309:3306'
+        volumes:
+            - 'dbdata:/var/lib/mysql'
+            - './docker/mysql/my.cnf:/etc/mysql/my.cnf'
+        networks:
+            - qode-network
+    redis:
+        image: 'redis:alpine'
+        container_name: qode-backend-redis
+        restart: unless-stopped
+        ports:
+            - '6379:6379'
+        networks:
+            - qode-network
+networks:
+    qode-network:
+        driver: bridge
+volumes:
+    dbdata:
+        driver: local
