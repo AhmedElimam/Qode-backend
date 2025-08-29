@@ -1,0 +1,639 @@
+{
+	"info": {
+		"_postman_id": "qode-news-api-collection",
+		"name": "Qode News Aggregation API",
+		"description": "Complete API collection for the Laravel-based news aggregation system with authentication, articles, and user preferences.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "qode-news-api"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user account"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login with user credentials and get access token"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Info",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/userinfo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"userinfo"
+							]
+						},
+						"description": "Get authenticated user information"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						},
+						"description": "Logout and invalidate access token"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration, login, and logout"
+		},
+		{
+			"name": "Articles",
+			"item": [
+				{
+					"name": "Get All Articles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/articles?page=1&per_page=20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "per_page",
+									"value": "20",
+									"description": "Articles per page (max 100)"
+								}
+							]
+						},
+						"description": "Get paginated list of all articles"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Articles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/articles/search?keyword=technology&category=science&source=the_guardian&from_date=2024-01-01&to_date=2024-12-31&page=1&per_page=20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								"search"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "technology",
+									"description": "Search keyword"
+								},
+								{
+									"key": "category",
+									"value": "science",
+									"description": "Filter by category"
+								},
+								{
+									"key": "source",
+									"value": "the_guardian",
+									"description": "Filter by source"
+								},
+								{
+									"key": "from_date",
+									"value": "2024-01-01",
+									"description": "Start date (YYYY-MM-DD)"
+								},
+								{
+									"key": "to_date",
+									"value": "2024-12-31",
+									"description": "End date (YYYY-MM-DD)"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "per_page",
+									"value": "20",
+									"description": "Articles per page"
+								}
+							]
+						},
+						"description": "Search articles with filters"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Personalized Feed",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/articles/personalized?per_page=20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								"personalized"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"description": "Articles per page"
+								}
+							]
+						},
+						"description": "Get personalized articles based on user preferences"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Articles by Source",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/articles/source/the_guardian?per_page=20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								"source",
+								"the_guardian"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"description": "Articles per page"
+								}
+							]
+						},
+						"description": "Get articles from specific source (the_guardian, new_york_times, mediastack)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Articles by Category",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/articles/category/technology?per_page=20",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								"category",
+								"technology"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"description": "Articles per page"
+								}
+							]
+						},
+						"description": "Get articles by category (technology, science, business, entertainment, health, sports, politics)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Article by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/articles/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								"1"
+							]
+						},
+						"description": "Get specific article by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Articles",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/articles/refresh",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								"refresh"
+							]
+						},
+						"description": "Manually refresh articles from external APIs"
+					},
+					"response": []
+				}
+			],
+			"description": "Article management endpoints"
+		},
+		{
+			"name": "User Preferences",
+			"item": [
+				{
+					"name": "Get User Preferences",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/preferences",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"preferences"
+							]
+						},
+						"description": "Get user's current preferences"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Preferences",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sources\": [\"the_guardian\", \"new_york_times\"],\n    \"categories\": [\"technology\", \"science\", \"business\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/user/preferences",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"preferences"
+							]
+						},
+						"description": "Update user preferences for sources and categories"
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Source",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/sources/the_guardian/toggle",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"sources",
+								"the_guardian",
+								"toggle"
+							]
+						},
+						"description": "Toggle source preference (the_guardian, new_york_times, mediastack)"
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/categories/technology/toggle",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"categories",
+								"technology",
+								"toggle"
+							]
+						},
+						"description": "Toggle category preference (technology, science, business, entertainment, health, sports, politics)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Sources",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/sources",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"sources"
+							]
+						},
+						"description": "Get user's preferred sources"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"categories"
+							]
+						},
+						"description": "Get user's preferred categories"
+					},
+					"response": []
+				}
+			],
+			"description": "User preference management endpoints"
+		},
+		{
+			"name": "Test Endpoints",
+			"item": [
+				{
+					"name": "Test API",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/test",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"test"
+							]
+						},
+						"description": "Test API connectivity"
+					},
+					"response": []
+				}
+			],
+			"description": "Testing and health check endpoints"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string",
+			"description": "Base URL for the API"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string",
+			"description": "Access token for authenticated requests"
+		}
+	]
+}
