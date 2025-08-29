@@ -117,7 +117,14 @@ class NewsAggregationService
             $userSources = $user->sources()->where('is_active', true)->pluck('source')->toArray();
             $userCategories = $user->categories()->where('is_active', true)->pluck('category')->toArray();
 
+            Log::info('User preferences for personalized feed', [
+                'user_id' => $user->id,
+                'sources' => $userSources,
+                'categories' => $userCategories
+            ]);
+
             if (empty($userSources) && empty($userCategories)) {
+                Log::info('No user preferences found, returning latest articles');
                 return $this->articleRepository->search(null, null, null, null, null, $perPage);
             }
 

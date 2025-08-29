@@ -58,10 +58,20 @@ class ArticleRepository
         array $categories,
         int $perPage = 20
     ): LengthAwarePaginator {
-        return $this->model->whereIn('source', $sources)
-            ->whereIn('category', $categories)
-            ->orderBy('published_at', 'desc')
-            ->paginate($perPage);
+        $query = $this->model->query();
+        
+        if (!empty($sources) && !empty($categories)) {
+            $query->where(function($q) use ($sources, $categories) {
+                $q->whereIn('source', $sources)
+                  ->orWhereIn('category', $categories);
+            });
+        } elseif (!empty($sources)) {
+            $query->whereIn('source', $sources);
+        } elseif (!empty($categories)) {
+            $query->whereIn('category', $categories);
+        }
+        
+        return $query->orderBy('published_at', 'desc')->paginate($perPage);
     }
 
     public function create(array $data): Article

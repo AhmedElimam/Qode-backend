@@ -48,8 +48,16 @@ class ArticleController extends Controller
         $endDate = $request->get('end_date');
         $perPage = $request->get('per_page', 20);
 
+        if (!$keyword && !$source && !$category && !$startDate && !$endDate) {
+            return $this->successResponse([
+                'data' => [],
+                'message' => 'No search criteria provided',
+                'count' => 0,
+            ]);
+        }
+
         $articles = $this->newsAggregationService->searchArticles(
-            $keyword,
+            $keyword ?? '',
             $source,
             $category,
             $startDate,
@@ -122,5 +130,27 @@ class ArticleController extends Controller
         return $this->successResponse([
             'count' => count($articles),
         ], 'Articles refreshed successfully');
+    }
+
+    public function categories(): JsonResponse
+    {
+        $categories = NewsCategory::cases();
+        $categoryData = array_map(fn($category) => [
+            'value' => $category->value,
+            'display_name' => $category->getDisplayName()
+        ], $categories);
+
+        return $this->successResponse($categoryData, 'Categories retrieved successfully');
+    }
+
+    public function sources(): JsonResponse
+    {
+        $sources = NewsSource::cases();
+        $sourceData = array_map(fn($source) => [
+            'value' => $source->value,
+            'display_name' => $source->getDisplayName()
+        ], $sources);
+
+        return $this->successResponse($sourceData, 'Sources retrieved successfully');
     }
 }

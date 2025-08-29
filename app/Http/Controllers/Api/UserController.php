@@ -27,6 +27,7 @@ class UserController extends Controller
     public function preferences(PreferencesRequest $request): JsonResponse
     {
         $user = $request->user();
+        $user->load(['sources', 'categories']); 
         $preference = $this->userPreferenceRepository->getOrCreatePreference($user);
 
         return $this->resourceResponse(

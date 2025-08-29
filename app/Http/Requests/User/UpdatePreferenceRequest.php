@@ -22,7 +22,7 @@ class UpdatePreferenceRequest extends FormRequest
             'articles_per_page' => 'nullable|integer|min:5|max:100',
             'notifications_enabled' => 'nullable|boolean',
             'sources' => 'nullable|array',
-            'sources.*' => 'string|in:news_api,the_guardian,new_york_times,bbc_news,open_news,newscred',
+            'sources.*' => 'string|in:the_guardian,new_york_times,mediastack',
             'categories' => 'nullable|array',
             'categories.*' => 'string|in:business,technology,sports,entertainment,health,science,politics,world,national,local,opinion,arts,food,travel,education',
         ];

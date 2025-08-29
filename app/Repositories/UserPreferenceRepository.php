@@ -19,12 +19,16 @@ class UserPreferenceRepository
 
     public function getOrCreatePreference(User $user): UserPreference
     {
-        return $user->preference ?? $user->preference()->create([
+        $preference = $user->preference ?? $user->preference()->create([
             'language' => 'en',
             'country' => 'us',
             'articles_per_page' => 20,
             'notifications_enabled' => true,
         ]);
+        
+        $user->load(['sources', 'categories']);
+        
+        return $preference;
     }
 
     public function updatePreference(User $user, array $data): UserPreference

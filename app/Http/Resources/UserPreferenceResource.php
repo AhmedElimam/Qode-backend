@@ -22,12 +22,8 @@ class UserPreferenceResource extends JsonResource
             'articles_per_page' => $this->articles_per_page,
             'notifications_enabled' => $this->notifications_enabled,
             'settings' => $this->settings,
-            'sources' => $this->whenLoaded('user', function () {
-                return $this->user->sources()->where('is_active', true)->pluck('source');
-            }),
-            'categories' => $this->whenLoaded('user', function () {
-                return $this->user->categories()->where('is_active', true)->pluck('category');
-            }),
+            'sources' => $this->user->sources()->where('is_active', true)->pluck('source')->toArray(),
+            'categories' => $this->user->categories()->where('is_active', true)->pluck('category')->toArray(),
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
         ];

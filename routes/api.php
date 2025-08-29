@@ -27,12 +27,18 @@ Route::prefix('articles')->group(function () {
     Route::get('/personalized', [ArticleController::class, 'personalized'])->middleware('auth:sanctum');
     Route::get('/source/{source}', [ArticleController::class, 'bySource']);
     Route::get('/category/{category}', [ArticleController::class, 'byCategory']);
+    Route::get('/categories', [ArticleController::class, 'categories']);
     Route::get('/{id}', [ArticleController::class, 'show']);
     Route::post('/refresh', [ArticleController::class, 'refresh'])->middleware('auth:sanctum');
 });
 
+Route::prefix('sources')->group(function () {
+    Route::get('/', [ArticleController::class, 'sources']);
+});
+
 Route::prefix('user')->middleware('auth:sanctum')->group(function () {
     Route::get('/preferences', [UserController::class, 'preferences']);
+    Route::post('/preferences', [UserController::class, 'updatePreferences']);
     Route::put('/preferences', [UserController::class, 'updatePreferences']);
     Route::post('/sources/{source}/toggle', [UserController::class, 'toggleSource']);
     Route::post('/categories/{category}/toggle', [UserController::class, 'toggleCategory']);
