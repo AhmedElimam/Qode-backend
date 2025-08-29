@@ -25,7 +25,7 @@ $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-if ($httpCode === 201) {
+if ($httpCode === 200) {
     $data = json_decode($response, true);
     echo "✓ User registered successfully\n";
     $token = $data['token'] ?? null;
